@@ -26,7 +26,8 @@ class awLogin {
         /********************
          *SET Vars Data
         ********************/
-        parse_str(http_build_query($inputs));
+        parse_str(http_build_query($inputs),$queryArray);
+        extract($queryArray);
 
         foreach($datas as $data)
         {
@@ -243,7 +244,8 @@ class awLogin {
 
     public static function validFields(&$params,$inputs,$token = null)
     {
-       parse_str(http_build_query($inputs));
+       parse_str(http_build_query($inputs),$queryArray);
+       extract($queryArray);
 
        $validFields = explode(",",$params->get('validFields'));
        preg_match_all("/(.+)?{(.+)}/U", $params->get('validFields'), $vFields);

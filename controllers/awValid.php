@@ -17,9 +17,14 @@ use Joomla\CMS\User\User;
 ********/
 
 class awValid {
+    public static function nada(){
+        echo 'kkk';
+        exit();
+    }
 
 	public static function awV($validar,$value,$campo,$name)
 	{
+        
 		switch ($validar) {
 			case 'cpf':
 				if(self::validCPF($value,$campo,$name))
@@ -64,39 +69,45 @@ class awValid {
         }
     }
 
-    public static function validCPF($cpf,$campo,$name) {
- 
-    // Extrai somente os números
-    $cpf = preg_replace( '/[^0-9]/is', '', $cpf );
-    $status = true;
-     
-    // Verifica se foi informado todos os digitos corretamente
-    if (strlen($cpf) != 11) {
-        $status = false;
-    }
-    // Verifica se foi informada uma sequência de digitos repetidos. Ex: 111.111.111-11
-    if (preg_match('/(\d)\1{10}/', $cpf)) {
-        $status = false;
-    }
+    public static function validCPF($cpf,$campo,$name) 
+    {
+        $status = true;
+        $dados = [];
+        $dados[$name] = 'Este campo não é um CPF válido';
+        $menError = json_encode($dados).',';
+
+
+        // Extrai somente os números
+        $cpf = preg_replace( '/[^0-9]/is', '', $cpf );
+   
+        // Verifica se foi informado todos os digitos corretamente
+        if (strlen($cpf) != 11) {
+                echo $menError;
+            return false;
+        }
+        // Verifica se foi informada uma sequência de digitos repetidos. Ex: 111.111.111-11
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
+                echo $menError;
+            return false;
+        }
+
+   
     // Faz o calculo para validar o CPF
     for ($t = 9; $t < 11; $t++) {
         for ($d = 0, $c = 0; $c < $t; $c++) {
-            $d += $cpf{$c} * (($t + 1) - $c);
+            $d += $cpf[$c] * (($t + 1) - $c);
         }
         $d = ((10 * $d) % 11) % 10;
-        if ($cpf{$c} != $d) {
+        if ($cpf[$t] != $d) {
             $status = false;
+            break; // Se o dígito verificador não corresponder, não há necessidade de continuar o loop
         }
     }
 
     if(!$status){
-        $dados = [];
-        //$dados[$name] = 'O campo '.$campo.' é Obrigatório';
-        $dados[$name] = 'Este campo não é um CPF válido';
+            echo $menError;
+        return false;
 
-        echo json_encode($dados).',';
-
-        //echo awUtilitario::awMessages('O campo <b>'.$campo.'</b> não é um CPF válido','danger');
     }
 
     return $status;
@@ -109,7 +120,7 @@ class awValid {
         switch ($vt) {
             case 'password':
                 // Gerar um salt aleatório de 32 bytes
-                $salt = random_bytes(12);
+                //$salt = random_bytes(12);
 
                 // Criar a senha criptografada com o salt
                // $crypt = password_hash($val . base64_encode($salt), PASSWORD_DEFAULT);
@@ -134,7 +145,7 @@ class awValid {
             $dados = [];
             //$dados['erro_campo'] = true;
             //$dados[$name] = 'O campo '.$campo.' é Obrigatório';
-            $dados[$name] = 'Campo obrigatório';
+            $dados[$name] = 'Campo obrigatório <br>';
 
             echo json_encode($dados).',';
             //echo awUtilitario::awMessages('O campo <b>'.$campo.'</b> é Obrigatório','danger');

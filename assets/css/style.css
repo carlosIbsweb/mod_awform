@@ -24,7 +24,16 @@
   background: #efefef;
   z-index: 9 !important;
 }
-
+.aw-form-fields .form-check-input {
+  margin-right: 7px;
+}
+.aw-form-fields [data-check-read="1"] {
+  cursor:pointer !important;
+}
+.aw-form-fields [data-check-read="1"] + a {
+  color:#3c65c0 !important;
+  cursor:pointer
+}
 .aw-status-loading {
   font-size: 18px
 }
@@ -50,8 +59,21 @@
 .aw-column .form-group {
   margin-bottom: 20px;
 }
+.aw-column .form-group.checkbox {
+  margin-bottom: 5px
+}
+.aw-column .form-group.checkbox:last-child {
+  margin-bottom: 20px !important
+}
 .aw-text-error {
   color:red;
+}
+.awModalCheckContent {
+  position:relative;
+  z-index: 999991
+}
+.awModalCheckContent + .modal-backdrop {
+  z-index: 99999 !important
 }
 span.uploadInput {
   background:#888888;
@@ -259,6 +281,7 @@ span.uploadClose {}
 .awMform .alert {
   margin: 0
 }
+
 .awMform::-webkit-scrollbar-thumb {
   background:#9e9e9e !important
 }
@@ -270,17 +293,20 @@ span.uploadClose {}
 .awMform {
    position: fixed;
    background:rgba(0,0,0,0.8);
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  z-index: 999991;
-  padding: 20px;
-  box-sizing: border-box;
-  text-align: center;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   overflow: auto;
+   z-index: 99999;
+   padding: 20px;
+   box-sizing: border-box;
+   text-align: center;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 .awMform .aw-form-status {
   margin-top:0px !important
@@ -292,16 +318,23 @@ span.uploadClose {}
     vertical-align: middle;
     margin-right: -0.05em;
 }
+.awFormModalHeader, .awMformContent form {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+}
+.awFormModalHeader h4 {
+  font-size: 2.6vh
+}
 .awMformContent {
     vertical-align: middle;
     display:inline-block;
     position: relative;
     z-index: 999;
-    max-width: 500px;
+    max-width: 700px;
     box-sizing: border-box;
-    width: 90%;
+    width: 100%;
     background: #fff;
-    padding: 15px 30px;
+    padding: 15px 0;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     -o-border-radius: 8px;
@@ -324,6 +357,7 @@ span.uploadClose {}
   z-index:99999;
   top: 0px;
   cursor:pointer;
+  margin: 10px;
 }
 .awMfClose::before,
 .awMfClose::after {

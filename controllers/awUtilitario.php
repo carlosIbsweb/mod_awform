@@ -61,9 +61,8 @@ class awUtilitario {
     	return array_filter($varsArr);
     }
 
-	public static function awMessages($msg,$alert)
+	public static function awMessages($msg,$alert = 'success')
 	{
-		$alert 		= !empty($alert) ? $alert : 'success'; 
 		$message 	= [];
 		$message[] 	= '<div class="alert alert-'.$alert.'" style="text-align:center;">';
   		$message[] 	= $msg;
@@ -71,10 +70,6 @@ class awUtilitario {
 
 		return implode('',$message);
 	}
-
-  public static function nada(){
-    echo 'nada';
-  }
 
   //Gerar variáveis dentro do texto exemplo {variavel}
   public static function gerarVarText($texto,...$variaveis) {
@@ -93,5 +88,14 @@ class awUtilitario {
     $textoVars = str_replace($arrayTexto[0],$textoArr, $texto);
 
     return $textoVars;
+  }
+
+  //Buscar um valor por um atributo
+
+  public static function getAttr($attrName, $attr) {
+    if(preg_match('/\b' . preg_quote($attrName) . '\s*=\s*"([^"]+)"/', $attr, $match)) {
+        return $match[1];
+    }
+    return false;
   }
 }

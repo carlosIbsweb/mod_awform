@@ -16,6 +16,7 @@ $uri = Uri::getInstance();
 $moduleId = 'awForm-'.$module->id;
 
 $classHelper = new modawformHelper;
+
 ?>
 
 <form action="" class="aw-form" method="post" id="<?= $moduleId;?>" <?= $modal == 'modal' ? 'style="display: none"': null;?> <?= $modal == 'modal' ? 'class="awModalForm"': null;?>>
@@ -41,4 +42,10 @@ $classHelper = new modawformHelper;
 	})
 </script>
 
+<?php /*
+<a class="awFormModal" data-title="Da Escola para a Universidade" data-subtitle="Preencha os dados abaixo e receba o e-book em seu e-mail!" data-id="25" href="136">Modal Form</a>
 
+
+<button class="btn btn-primary awCheckModal" data-title="Como é amigo">Open first modal</button>
+
+*/?>

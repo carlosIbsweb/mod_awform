@@ -22,7 +22,6 @@ class awDbController {
 
 	public static function setDb($iPosts,&$params,$iFiles,$moduleId)
 	{
-
 		$dbData = explode(',',$params->get('dataDb'));
 		$user = Factory::getUser();
 
@@ -30,7 +29,8 @@ class awDbController {
 		$dbValues = array();
 
 		//Vars Inputs
-		parse_str(http_build_query($iPosts));
+		parse_str(http_build_query($iPosts),$queryArray);
+        extract($queryArray);
 
 		if(!$params->get('activDb'))
 		{
@@ -108,16 +108,16 @@ class awDbController {
 		
 
 		$query = $db->getQuery(true);
+        
 		
 
 		//Adicionar tabela e campos caso não existam.
 		self::updateTable($params->get('db'), $dbColumn);
 
-
 		if(self::salvarDados($params->get('db'), $user->id, $dbColumn, $dbValues,$formId,$params)){
 			return true;
 		}else{
-			echo 'oieee';
+			echo 'oieee';   
 		return;
 			return false;
 		}
@@ -155,7 +155,8 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
 	$db    = Factory::getDbo();
 
 	//Vars Inputs
-	parse_str(http_build_query($iPosts));
+	parse_str(http_build_query($iPosts),$queryArray);
+    extract($queryArray);
 
 	//Vars globais.
 	$awToken = $_SESSION['awToken'];
@@ -215,12 +216,12 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
     /*
 	* Trazer os dados da tabela com o id do usuário
     */
-    public function getDados($tabela,$id, $params){
+    public static function getDados($tabela,$id, $params){
+        
     	// Criar uma instância da classe de banco de dados
     	$db = Factory::getDBO();
-
+        
     	if(empty($id) || $params->get('editUser') != 1){
-
     		return ['user' => false];
     	}
 
@@ -249,8 +250,6 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
         // Criar uma instância da classe de banco de dados
         $db = Factory::getDBO();
 
-
-
         if($params->get('editUser')){
         	// Verificar se já existe um registro com o user_id especificado
         	$query = $db->getQuery(true);
@@ -259,7 +258,6 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
 	        $query->where($db->quoteName('user_id') . ' = ' . $db->quote($id));
 	        $db->setQuery($query);
 
-
 	        try {
 
 	        	$registroExistente = $db->loadAssoc();
@@ -267,7 +265,6 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
 	        	Factory::getApplication()->enqueueMessage('Erro ao atualizar registro: ' . $e->getMessage(), 'error');
 	        }
         }
-
 
         if ($registroExistente && $id !== 0 && $params->get('editUser')) {
             // Se o registro existir, atualize-o
@@ -283,10 +280,9 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
             $condicao = $db->quoteName('user_id') . ' = ' . $db->quote($id);
 
             $query->clear()
-                  ->update($db->quoteName($tabela))
-                  ->set($set)
-                  ->where($condicao);
-
+                ->update($db->quoteName($tabela))
+                ->set($set)
+                ->where($condicao);
             try {
                 $db->setQuery($query);
                 $db->execute();
@@ -345,9 +341,8 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
     }
 
     // Responsável por adicionar novos campos na tabela
-    public function updateTable($tabela, $novosCampos)
+    public static function updateTable($tabela, $novosCampos)
     {
-
        $db = Factory::getDbo();
        $tableName = $tabela;
 
@@ -412,10 +407,12 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
 
                     Factory::getApplication()->enqueueMessage('Campo ' . $novoCampo . ' adicionado com sucesso.', 'message');
                 } catch (Exception $e) {
-                    Factory::getApplication()->enqueueMessage('Erro ao adicionar campo ' . $novoCampo . ': ' . $e->getMessage(), 'error');
+                     awUtilitario::awMessages($e->getMessage(),'danger');
+                        return false;
                 }
             }
         }
+        
     }
 
     //Atualizar dados por token
@@ -561,6 +558,30 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
         $results = $db->loadObjectList();
 
         return $results;
+    }
+
+
+    public static function getContentId($id)
+    {
+        // Get a db connection.
+        $db = Factory::getDbo();
+
+        // Create a new query object.
+        $query = $db->getQuery(true);
+
+        // Select all records from the user profile table where key begins with "custom.".
+        // Order it by the ordering field.
+        $query->select(array($db->quoteName('introtext'),$db->quoteName('title')));
+        $query->from($db->quoteName('#__content'));
+        $query->where($db->quoteName('id') . ' = ' . $db->quote($id));
+
+        // Reset the query using our newly populated query object.
+        $db->setQuery($query);
+
+        // Load the results as a list of stdClass objects (see later for more options on retrieving data).
+        $results = $db->loadObjectList();
+
+        return $results[0];
     }
 
 }

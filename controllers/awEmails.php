@@ -39,13 +39,14 @@ class awEmails {
 
 			//Vars Inputs
 			$queryString = http_build_query($iPosts);
-			parse_str($queryString); //Vars
-			parse_str($queryString, $arrayChaveValor);
+			parse_str($queryString, $queryArray);
+			extract($queryArray); //Vars
 
 			//Vars Files
-			parse_str(http_build_query($iFiles));
+			parse_str(http_build_query($iFiles),$queryFilesArray);
+			extract($queryFilesArray);
 
-			$subject = awUtilitario::gerarVarText($subject,$arrayChaveValor);
+			$subject = awUtilitario::gerarVarText($subject,$queryArray);
 
 			/********************
 			 *Var Globais

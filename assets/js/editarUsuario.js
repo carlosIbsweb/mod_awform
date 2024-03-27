@@ -129,7 +129,7 @@ function dadosUser() {
       formData.append('formName', form)
 
       $.ajax({
-          url: '/index.php?option=com_ajax&module=awform&method=dadosTabelaRelacaoUsuarios&format=json', // Substitua 'com_seucomponente' e 'suaTarefa' pelos valores corretos do seu componente
+          url: '/index.php?option=com_ajax&module=awform&method=dadosTabelaRelacaoUsuarios&format=json',
           type: 'POST',
           data: formData,
           contentType: false,
@@ -137,7 +137,12 @@ function dadosUser() {
           processData: false,
           success: function (response) {
 
-            data = JSON.parse(response)
+            try {
+              data = JSON.parse(response)
+            }catch (e) {
+              return false
+            }
+           
 
             if(data.user != false){
 

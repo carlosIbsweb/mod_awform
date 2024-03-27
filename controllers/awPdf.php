@@ -73,7 +73,8 @@ class awPdf {
         if(!empty($result))
         {
              /*Gerando vars*/
-            parse_str(http_build_query($result[0]));
+            parse_str(http_build_query($result[0]),$queryArray);
+            extract($queryArray);
         }
        
         

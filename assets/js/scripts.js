@@ -207,7 +207,7 @@
         formData.append('moduleId',formId);
 
         $.ajax({
-            url   : 'index.php?option=com_ajax&module=awform&method=awCaptcha&format=raw',
+            url   : '/index.php?option=com_ajax&module=awform&method=awCaptcha&format=json',
             type   : 'POST',
              data: formData,
             contentType: false,
@@ -233,7 +233,7 @@
           });
 
         $.ajax({
-            url   : 'index.php?option=com_ajax&module=awform&method=awLogin&format=raw',
+            url   : '/index.php?option=com_ajax&module=awform&method=awLogin&format=raw',
             type   : 'POST',
              data: formData,
             contentType: false,
@@ -274,7 +274,7 @@
         formData.append('awUEToken',awUEToken);
 
         $.ajax({
-            url   : 'index.php?option=com_ajax&module=awform&method=awD&format=raw',
+            url   : '/index.php?option=com_ajax&module=awform&method=awD&format=raw',
             type   : 'POST',
              data: formData,
             contentType: false,
@@ -434,18 +434,34 @@
       //removendo scroll body
       $('body').css('overflow-y','hidden')
         var layModal = [];
+        let el = $(fid);
         var fid = $(fid).attr('href').replace(/[^\d]+/g,'');
+        let modalTitle = el.data('title') ? `<h4>${el.data('title')}</h4>` : ''
+        let modalSubtitle = el.data('subtitle') ? `<p>${el.data('subtitle')}</p>` : ''
+        let modalDataId = el.data('id') ? el.data('id') : false;
+
       if($('.awMform').length == 0){
-        layModal.push('<div class="awMform" style="display:none">');
+        layModal.push('<div class="awMform" style="display:none">')
         var modForm = '<form action="" method="post" id="awForm-'+fid+'" novalidate="novalidate">'+sessionStorage.getItem('awMform-'+fid)+'</form>';
         $('#awForm-'+fid).show();
-        layModal.push('<div class="awMformContent animated fadeInDown" style="display:none"><span class="awMfClose"></span>'+modForm+'</div>');
+        layModal.push(`
+          <div class="awMformContent animated fadeInDown" style="display:none">
+            <div class="awFormModalHeader">
+                ${modalTitle}
+                ${modalSubtitle}
+            </div>
+            <span class="awMfClose"></span>
+              ${modForm}
+          </div>`);
         layModal.push('</div>')
         layModal = layModal.join('');
         $('body').prepend(layModal);
         $('.awMform').fadeIn(function(){
             $('.awMformContent').fadeIn(function(){
-        $( document ).trigger('awCaptcha'+'awForm-'+fid,['awForm-'+fid]);
+              $( document ).trigger('awCaptcha'+'awForm-'+fid,['awForm-'+fid]);
+              if(modalDataId){
+                $('[data-input-id="1"]').attr('value',modalDataId)
+              }
             });
         })
       }
@@ -455,6 +471,66 @@
       //Validação
       //awFormValid();
       }
+
+      /*
+        Modal Chebox
+      */
+      const modalCheckbox = function(el){ 
+
+        if($('.awModalCheckContent').length == 0){
+          $('body').append('<div class="awModalCheckContent"></div>')
+        }
+          let awModalContent = el.parents('.form-group').find('.aw-check-read-content')
+            $('.awModalCheckContent').html(`
+              <div class="modal fade" id="awModalCheck" aria-hidden="true" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5">${awModalContent.data('title')}</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            ${awModalContent.html()}
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center">
+                            <button class="btn btn-primary aceiteOk" data-bs-dismiss="modal">Aceito</button>
+                        </div>
+                    </div>
+                  </div>
+              </div>
+            `)
+
+            $('#awModalCheck').modal('show')
+      }
+
+  
+
+        $(document).on('click','[data-check-read="1"]',function(event){
+          
+
+          if($(this).is(':checked') != false){
+            event.preventDefault();
+            modalCheckbox($(this));
+            modalCheck($(this),'.aceiteOk','#formEbook')
+          }
+          
+        })
+      
+
+      function modalCheck(sel,selOk,selModal){
+        //removendo a ação anterior
+          $(document).off('click', selOk);
+         $(document).on('click',selOk,function(event){
+            if($(sel).is(':checked') ){
+              $(sel).filter(':checkbox').prop('checked',false)
+              $(sel).val(0)
+            }else{
+              $(sel).filter(':checkbox').prop('checked',true)
+              $(sel).val(1)
+            }
+         }) 
+      }
+        
 
       $(document).on('click','.awFormModal',function(event){
         event.preventDefault();

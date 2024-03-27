@@ -96,7 +96,8 @@ public static function getForm($dados,$colFields = array(),$wColumn,$captcha,$mo
 public static function render($fields,$wColumn,$captcha,$moduleId,$params){
 	
 	//Vars
-	parse_str(http_build_query(json_decode(json_encode($fields),true)));
+	parse_str(http_build_query(json_decode(json_encode($fields),true)),$queryArr);
+	extract($queryArr);
 
 	$renderFields = [];
 	$renderForm = [];
@@ -207,12 +208,19 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params){
 					$classCheck = $sFormat != 'inline' ? null : 'class="'.$inputType.'-inline"';
 
 				    foreach($options as $option){
+						$dataCheckRead = awUtilitario::getAttr('data-check-read',$attr);
+						$dataCheckContentId = awUtilitario::getAttr('data-content-id',$attr);
+						$dataContent = awDbController::getContentId($dataCheckContentId);
+
 						$checked = $option['selected'] ? 'checked' : null;
 						$renderFields[] = $sFormat != 'inline' ? '<div class="'.$inputType.'">' : null;
 						$renderFields[] = '<label '.$classCheck.'>';
-				    	$renderFields[] = '<input class="form-check-input" type="'.$inputType.'"  id="gridRadios1" value="'.$option['value'].'" '.$attr.' '.$checked. $valid.'>';
+				    	$renderFields[] = '<input class="form-check-input" type="'.$inputType.'"  id="'.$name.'" value="'.$option['value'].'" '.$attr.' '.$checked. $valid.'>';
 				    	$renderFields[] =  $option['label'];
 				    	$renderFields[] = '</label>';
+						if($dataCheckRead && $dataContent){
+							$renderFields[] = '<div data-title="'.$dataContent->title.'" class="aw-check-read-content" style="display:none">'.$dataContent->introtext.'</div>';
+						}
 				    	$renderFields[] = $sFormat != 'inline' ? '</div>' : null;
 					}
 					break;
@@ -240,7 +248,7 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params){
 			}
 			break;
 		case 'select':
-			$renderFields[] = '<select class="form-control" id="exampleFormControlSelect1" '.$attr. $valid.'>';
+			$renderFields[] = '<select class="form-control" id="'.$attr['name'].'" '.$attr. $valid.'>';
 				foreach($options as $option){
 					$selected = $option['selected'] ? 'selected' : null;
 					$renderFields[] = '<option value="'.$option['value'].'" '.$selected.'>'.$option['label'].'</option>';
@@ -314,7 +322,7 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params){
 	//Removendo label.
 	$label = $tag != 'h1' ? $label : null;
 
-	$renderForm[] = '<div class="form-group">';
+	$renderForm[] = '<div class="form-group '.$inputType.'">';
 	$renderForm[] = $label;
 	$renderForm[] = !empty($valid) ? '<div class="awValidMsg">' : null;
 	$renderForm[] = implode('',$renderFields);

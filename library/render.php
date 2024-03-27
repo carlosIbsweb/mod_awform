@@ -99,7 +99,8 @@ public static function getForm($dados,$colFields = array(),$wColumn,$captcha,$mo
 public static function render($fields,$wColumn,$captcha,$moduleId){
 	
 	//Vars
-	parse_str(http_build_query(json_decode(json_encode($fields),true)));
+	parse_str(http_build_query(json_decode(json_encode($fields),true)),$queryArray);
+	extract($queryArray);
 
 	$renderFields = [];
 	$renderForm = [];

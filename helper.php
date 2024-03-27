@@ -30,9 +30,9 @@ class modawformHelper
 
 	}
 
-	public function setFormAjax()
+	public static function setFormAjax()
 	{
-
+		
 		$input = Factory::getApplication()->input;
 		//inputs
 		$iFiles 	= $_FILES;
@@ -43,13 +43,13 @@ class modawformHelper
 		/********************
 		 *SET Vars Data
 		********************/
-		parse_str(http_build_query($iPosts));
+		parse_str(http_build_query($iPosts),$queryArray);
+		extract($queryArray);
 
 		$moduleId = explode('-',$moduleId);
 		$moduleId = $moduleId[1];
 		$awCaptcha = 'awCaptcha-'.$moduleId;
 		$awCaptcha = $$awCaptcha;
-
 
 
 		/********************
@@ -69,6 +69,7 @@ class modawformHelper
 
 		//self::setTableRelated($params);
 		//return false;
+		
 
 		/********************
 		 *SET Vars Globais
@@ -95,14 +96,15 @@ class modawformHelper
 		//return false;
 		//exit();
 
-		//Valid Campos
+		//Valid Campos	
 		if(!self::awRequired($iPosts,$params,$iFiles))
 		{
 			return false;
 		}
-
+		
 		if(!self::awValid($iPosts,$params,$iFiles))
 		{
+			
 			return false;
 		}
 
@@ -238,6 +240,7 @@ class modawformHelper
 
 	public static function awRequired($inputs,&$params,$iFiles = [])
 	{
+		
 		if(!self::awValidador($inputs,$params,$iFiles,'obrigatorio','valid')){
 			exit();
 		}
@@ -264,6 +267,7 @@ class modawformHelper
 		}
 
 		}
+
 		if(!self::awValidador($inputs,$params,$iFiles, false,'valid-type')){
 			exit();
 		}
@@ -279,7 +283,8 @@ class modawformHelper
 		/********************
 		 *SET Vars Data
 		********************/
-		parse_str(http_build_query($iPosts));
+		parse_str(http_build_query($iPosts),$queryArray);
+		extract($queryArray);
 
 		$moduleId = explode('-',$moduleId);
 		$moduleId = $moduleId[1];
@@ -332,7 +337,8 @@ class modawformHelper
 		/********************
 		 *SET Vars Data
 		********************/
-		parse_str(http_build_query($iPosts));
+		parse_str(http_build_query($iPosts),$queryArray);
+		extract($queryArray);
 
 		$moduleId = explode('-',$moduleId);
 		$moduleId = $moduleId[1];
@@ -455,7 +461,8 @@ class modawformHelper
 	}
 
 
-    public function dadosTabelaRelacaoUsuariosAjax($p = false, $params = '{}'){
+    public static function dadosTabelaRelacaoUsuariosAjax($p = false, $params = '{}'){
+
 
     	$user = Factory::getUser();
 
@@ -465,7 +472,7 @@ class modawformHelper
     		$formData = $_POST;
 
         	//Params
-        	$params = self::getParams($formData['formId']);
+        	$params = self::getParams($formData['formId']);	
 
         	if($params->get('editUser') != 1){
     			echo json_encode(['user' => false]);
@@ -477,14 +484,12 @@ class modawformHelper
     	}else{
     		return awDbController::getDados($params->get('db'),$user->id,$params);
     	}
-        
-
-        
     }
 
 
     //Get params modulo ajax
-    public function getParams($moduleId){
+    public static function getParams($moduleId){
+
     	/********************
     	 *GET Params
     	********************/
@@ -531,7 +536,6 @@ class modawformHelper
     			}
     		}
     	}
-    	
 
     	$dados = array_merge($inputs, $iFiles);
 
@@ -579,57 +583,50 @@ class modawformHelper
     		}
     	}
 
-    	//Tirando a obrigatoriedade de anexos para edição de dados caso existam no banco.
-    	$dadosAnexos = json_decode(self::dadosTabelaRelacaoUsuariosAjax(true,$params)[0]->anexos,true);
-    	$dadosAnexosKeys = array_keys($dadosAnexos);
+		if($params->get('editUser') == 1) {
+			//Tirando a obrigatoriedade de anexos para edição de dados caso existam no banco.
+			$dadosAnexos = json_decode(self::dadosTabelaRelacaoUsuariosAjax(true,$params)[0]->anexos,true);
+			$dadosAnexosKeys = array_keys($dadosAnexos);
 
-    	$dadosAnexosAll = $dadosAnexos;
-    	$dadosAnexosPost = $inputs['aw_anexos'];
+			$dadosAnexosAll = $dadosAnexos;
+			$dadosAnexosPost = $inputs['aw_anexos'];
 
-    	$dadosAnexos = array_map(function($dado){
-    		return $dado.'[]';
-    	}, $dadosAnexosKeys);
-
+			$dadosAnexos = array_map(function($dado){
+				return $dado.'[]';
+			}, $dadosAnexosKeys);
+		}else{
+			$dadosAnexos = false;
+		}
 
     	$camposObrigatorios = array_diff($vNames,$keysWithNonEmptyValues);
 		
 		//removendo obrigatoriedade de anexos ou não.
 		$camposObrigatorios = $dadosAnexos ? array_diff($camposObrigatorios,$dadosAnexos) : $camposObrigatorios;
-
+		
+		
     	$camposParaValidar = $vNames;
 
+		if($params->get('editUser') == 1) {
+			// Calcule a diferença usando array_udiff
 
+			// Reformate $array2 para corresponder à estrutura de $array1
+			$dadosAnexosPostFormatado = [];
+			foreach ($dadosAnexosPost as $elemento) {
+				foreach ($elemento as $chave => $valor) {
+					$dadosAnexosPostFormatado[$chave][] = $valor;
+				}
+			}
 
+			$diferenca = array_udiff($dadosAnexosPostFormatado,$dadosAnexosAll,'array_diff_assoc');
 
-    	/*$iFilesValidacao = array_map(function($file){
-    		return $file.'[]';
-    	},array_keys($iFiles));
-
-    	//Se conter um arquivo file, então valide ele.
-    	$dadosAnexos = array_diff($dadosAnexos,$iFilesValidacao);*/
-
-		// Calcule a diferença usando array_udiff
-
-		// Reformate $array2 para corresponder à estrutura de $array1
-		$dadosAnexosPostFormatado = [];
-		foreach ($dadosAnexosPost as $elemento) {
-		    foreach ($elemento as $chave => $valor) {
-		        $dadosAnexosPostFormatado[$chave][] = $valor;
-		    }
-		}
-
-		$diferenca = array_udiff($dadosAnexosPostFormatado,$dadosAnexosAll,'array_diff_assoc');
-
-		if($diferenca){
-
-			echo awUtilitario::awMessages('Você não pode modificar os anexos de edição dessa forma.','danger');
-			return false;
+			if($diferenca){
+				echo awUtilitario::awMessages('Você não pode modificar os anexos de edição dessa forma.','danger');
+				return false;
+			}
 		}
 		
-
     	//Mesma coisa aqui
     	$camposParaValidar = $dadosAnexos  ? array_diff($camposParaValidar,$dadosAnexos) : $camposParaValidar;
-
 
     	if($validador == 'obrigatorio'){
     		$campos = $camposObrigatorios;
@@ -645,6 +642,7 @@ class modawformHelper
 
     		//Tipo de dado, campo ou valor;
     		$tipoDeDado = $vC[$campo] != 'file' ? $validValues[$campo] : str_replace('[]','',$vNames[$vn]);
+			
     		if(!awValid::awV($vC[$campo],$tipoDeDado,$vL[$campo],$vNames[$vn]))
     		{
     			$status = false;

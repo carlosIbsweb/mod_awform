@@ -19,7 +19,8 @@ class renderFormEdit {
 public static function render($fields,$wColumn,$captcha,$moduleId,&$dbName){
 	
 	//Vars
-	parse_str(http_build_query(json_decode(json_encode($fields),true)));
+	parse_str(http_build_query(json_decode(json_encode($fields),true)),$queryArray);
+	extract($queryArray);
 
 	$renderFields = [];
 	$renderForm = [];
