@@ -45,9 +45,11 @@ $doc->addStyleSheet(JUri::base(true).'/modules/mod_awform/assets/css/awAnimate.c
 $doc->addStyleSheet(JUri::base(true).'/modules/mod_awform/assets/css/aw-loading.css');
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/jquery.mask.min.js');
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/jquery.validate.min.js');
+$doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/dataCep.js?V='.$scriptVersion);
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/scripts.js?v='.$scriptVersion);
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/gerarMulti.js?v='.$scriptVersion);
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/editarUsuario.js?v=9');
+
 
 
 //Meu sufixo de classe de módulo.

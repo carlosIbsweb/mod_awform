@@ -72,13 +72,19 @@
             </fieldset>
 
             <fieldset name="wkform" class="wkform">
+                <field name="debugarEmail" type="radio" default="0" label="Debugar" description="" class="btn-group btn-group-yesno radio">
+                    <option value="1">Ativar</option>
+                    <option value="0">Desativar</option>
+                    
+                </field>
                 <field type="spacer" name="wkHeaderEmailAdmin" class="text paramsWkHeader" label="MOD_WKCONTACT_HEADEMAILADMIN_LABEL"/>
                   <field name="activeEmail" type="radio" default="0" label="Enviar email" description="" class="btn-group btn-group-yesno radio">
                     <option value="1">Ativar</option>
                     <option value="0">Desativar</option>
                     
                 </field>
-                 <field name="exAtta" type="radio" default="0" label="Anexo" description="" class="btn-group btn-group-yesno radio">
+        
+                <field name="exAtta" type="radio" default="0" label="Anexo" description="" class="btn-group btn-group-yesno radio">
                     <option value="1">Ativar</option>
                     <option value="0">Desativar</option>
                     
@@ -142,6 +148,33 @@
                 <field name="awType" type="list" default="fixed" label="MOD_WKCONTACT_WKCONTACTTYPE_LABEL" description="MOD_WKCONTACT_WKCONTACTTYPE_DESCRIPTION">
                     <option value="fixed">MOD_WKCONTACT_WKCONTACTTYPE_OPTION_FIXED</option>
                     <option value="modal">MOD_WKCONTACT_WKCONTACTTYPE_OPTION_MODAL</option>
+                </field>
+
+                <field 
+                    name="awModalDb"
+                    showon="awType:modal"
+                    label="Tabela Items"
+                    type="text" 
+                    hint="#__tabela_para_pegar_items" 
+                >
+                </field>
+                <field 
+                    name="awModalDbCond"
+                    showon="awType:modal"
+                    label="Campo para condição"
+                    type="text" 
+                    hint="Exemplo: id" 
+                >
+
+                </field>
+                <field 
+                    name="awModalDbCondValue"
+                    showon="awType:modal"
+                    label="Campo do valor"
+                    type="text" 
+                    hint="Name do data-input-id ex:item_id" 
+                >
+
                 </field>
 
                 <field type="spacer" name="wkTypeDesc" class="text wkTypeDesc" label="MOD_WKCONTACT_WKTYPEDESC_LABEL"/>
@@ -413,14 +446,16 @@
                         label="Texto"
                         filter="safehtml"
                      />
-    
             </fieldset>
 
             <fieldset name="wkrecaptcha">
                 <field name="awcaptcha" type="radio" default="0" label="MOD_AWCAPTCHA_TITLE_LABEL" description="" class="btn-group btn-group-yesno radio">
                     <option value="1">Ativar</option>
                     <option value="0">Desativar</option>
-                    
+                </field>
+                <field name="awcaptchaType" type="list" default="awcaptcha" label="Tipo de Captcha">
+                    <option value="awcaptcha">AW Captcha</option>
+                    <option value="googleCaptcha">Google Captcha</option>
                 </field>
                  <field
                     name="aritim"

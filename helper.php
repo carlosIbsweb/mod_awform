@@ -48,7 +48,7 @@ class modawformHelper
 
 		$moduleId = explode('-',$moduleId);
 		$moduleId = $moduleId[1];
-		$awCaptcha = 'awCaptcha-'.$moduleId;
+		$awCaptcha = 'awCaptcha_'.$moduleId;
 		$awCaptcha = $$awCaptcha;
 
 
@@ -114,11 +114,13 @@ class modawformHelper
 			exit();
 		}
 
-		//Valid Captcha
-		if(!self::awCaptchaAjax($awCaptcha,false,null,$awCaptchaRest,$params) && $params->get('awcaptcha'))
-		{
-			return false;
-			exit();
+		if(!$params->get('debugarEmail')){
+			//Valid Captcha
+			if(!self::awCaptchaAjax($awCaptcha,false,null,$awCaptchaRest,$params) && $params->get('awcaptcha'))
+			{
+				return false;
+				exit();
+			}
 		}
 		
 		//Upload de arquivos
@@ -170,7 +172,7 @@ class modawformHelper
 				exit();
 			}
 		}
-
+		
 		//Set Email Admin
 		if($params->get('activeEmail'))
 		{
@@ -229,12 +231,19 @@ class modawformHelper
 
 		if($params->get('awcaptcha'))
 		{
-			if(!awCaptcha::getAwCaptcha($g,$jResult,$idModule,$gValue,$moduleId,$params)){
+			$awCaptcha = awCaptcha::getAwCaptcha($g,$jResult,$idModule,$gValue,$moduleId,$params);
+			if(!$awCaptcha){
 				exit();
 			}else{
-				return awCaptcha::getAwCaptcha($g,$jResult,$idModule,$gValue,$moduleId,$params);
+				if($awCaptcha === 'valido'){
+					return true;
+				}
+				echo $awCaptcha;
+				exit();
 			}
 		}
+
+		return false;
 	}
 
 
@@ -575,8 +584,9 @@ class modawformHelper
     				}
     			}
     		}else{
+				//Capturar os campos onde os valores são vazios para pode validar se forem obrigatórios.
     			$inputCampo = $key;
-    			if (!empty($value)) {
+    			if (!empty(trim($value))) {
     	        	$keysWithNonEmptyValues[] = $inputCampo;
     	    	}
     	    	$validValues[$inputCampo] = $value;
@@ -585,8 +595,8 @@ class modawformHelper
 
 		if($params->get('editUser') == 1) {
 			//Tirando a obrigatoriedade de anexos para edição de dados caso existam no banco.
-			$dadosAnexos = json_decode(self::dadosTabelaRelacaoUsuariosAjax(true,$params)[0]->anexos,true);
-			$dadosAnexosKeys = array_keys($dadosAnexos);
+			$dadosAnexos = json_decode(self::dadosTabelaRelacaoUsuariosAjax(true,$params)[0]->anexos,true) ;
+			$dadosAnexosKeys = is_array($dadosAnexos) ? array_keys($dadosAnexos) : [];
 
 			$dadosAnexosAll = $dadosAnexos;
 			$dadosAnexosPost = $inputs['aw_anexos'];
@@ -597,12 +607,11 @@ class modawformHelper
 		}else{
 			$dadosAnexos = false;
 		}
-
+		
     	$camposObrigatorios = array_diff($vNames,$keysWithNonEmptyValues);
 		
 		//removendo obrigatoriedade de anexos ou não.
 		$camposObrigatorios = $dadosAnexos ? array_diff($camposObrigatorios,$dadosAnexos) : $camposObrigatorios;
-		
 		
     	$camposParaValidar = $vNames;
 
@@ -617,7 +626,9 @@ class modawformHelper
 				}
 			}
 
-			$diferenca = array_udiff($dadosAnexosPostFormatado,$dadosAnexosAll,'array_diff_assoc');
+			$diferenca = $dadosAnexos ?
+				 array_udiff($dadosAnexosPostFormatado,$dadosAnexosAll,'array_diff_assoc')
+				 : [];
 
 			if($diferenca){
 				echo awUtilitario::awMessages('Você não pode modificar os anexos de edição dessa forma.','danger');

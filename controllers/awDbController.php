@@ -584,4 +584,30 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
         return $results[0];
     }
 
+    public static function awModalDb($params,$condValue = 0)
+    {
+        // Get a db connection.
+        $db = Factory::getDbo();
+
+        // Create a new query object.
+        $query = $db->getQuery(true);
+        
+        try {
+            $query->select(array('*'));
+            $query->from($db->quoteName($params->get('awModalDb')));
+            $query->where($db->quoteName($params->get('awModalDbCond')) . ' = ' . $db->quote($condValue));
+
+            // Reset the query using our newly populated query object.
+            $db->setQuery($query);
+
+            $results = $db->loadObjectList();
+
+        } catch(Exception $e){
+            echo $e->getMessage();
+            return false;
+        }
+        
+        return $results[0];
+    }
+
 }

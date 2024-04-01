@@ -9,6 +9,7 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+
 /********
  Classe Aw Captcha.
  Desenvolvido por Carlos (IBS WEB)
@@ -40,7 +41,7 @@ class awCaptcha {
 			exit();
 		}
 
-		$awRes = '<input type="text" name="awCaptcha-'.$moduleId.'" autocomplete="off">';
+		$awRes = '<input type="text" name="awCaptcha_'.$moduleId.'" autocomplete="off">';
 		$output = [];
 		$ofResult = [];
 		$diffResult = [];
@@ -140,7 +141,7 @@ class awCaptcha {
 
 		if($g == $_SESSION['awCaptcha-'.$moduleId] && isset($_SESSION['awCaptcha-'.$moduleId]) && $g != '' && $g != null)
 		{
-			return true;
+			return 'valido';
 			unset($_SESSION['awCaptcha-'.$moduleId]);
 			unset($_SESSION['report-'.$moduleId]);
 		}
@@ -174,13 +175,12 @@ class awCaptcha {
 					$_SESSION['report-'.$moduleId] = $report;
 					
 					if($jResult){
-						return $_SESSION['report-'.$moduleId];
-						return false;
+						return $report;
 					}
 					else
 					{
 						return false;
-					}	
+					}
 				}
 				return false;
 			}
@@ -198,6 +198,41 @@ class awCaptcha {
 		$message[] = '</div>';
 
 		return implode('',$message);
+	}
+
+	/****************
+	 # Gerar captcha Google reCaptcha.
+	*****************/
+	public static function getReCaptcha($dkey,$dsecret,$response)
+	{
+		// Register API keys at https://www.google.com/recaptcha/admin
+	    $siteKey = $dkey;//Chave Publica
+	    $secret = $dsecret; //Chave Privada
+		// reCAPTCHA supported 40+ languages listed here: https://developers.google.com/recaptcha/docs/language
+	    $lang = "pt-BR";
+		// The response from reCAPTCHA
+	    $resp = null;
+		// The error code from reCAPTCHA, if any
+	    $error = null;
+
+	    $reCaptcha = new ReCaptcha($secret);
+
+		// Was there a reCAPTCHA response?
+	    if ($response) 
+	    {
+	        $resp = $reCaptcha->verifyResponse(
+	        $_SERVER["REMOTE_ADDR"],
+	        $response
+	        );
+	    }
+	    if ($resp != null && $resp->success)
+	    {
+	        return true;
+	    }
+	    else
+	    {
+	        return false;
+	    }
 	}
 	
 }

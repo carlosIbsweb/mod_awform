@@ -71,7 +71,8 @@ class awUtilitario {
 		return implode('',$message);
 	}
 
-  //Gerar variáveis dentro do texto exemplo {variavel}
+
+  //substitui o campo {esse} por uma variável de uma string.
   public static function gerarVarText($texto,...$variaveis) {
 
     foreach($variaveis as $vars){
@@ -97,5 +98,29 @@ class awUtilitario {
         return $match[1];
     }
     return false;
+  }
+
+
+  //Substituir o valor da váriavel de {var}
+  public static function getVarType($var,$val) {
+
+    $vars = array();
+
+    if (count(explode('|',$var)) > 1) {
+      list($var, $type) = explode("|", $var); 
+    } else {
+      $type = false;
+    }
+
+
+    if ($type === 'img') {
+        $vars[$var] = "<img src='$val' alt='Imagem'>";
+    } elseif ($type === 'link') {
+        $vars[$var] = "<a href='$val'>$val</a>";
+    } else {
+        $vars[$var] = $val;
+    }
+
+    return $vars;
   }
 }

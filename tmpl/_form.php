@@ -16,15 +16,16 @@ $uri = Uri::getInstance();
 $moduleId = 'awForm-'.$module->id;
 
 $classHelper = new modawformHelper;
-
+//$renderCaptcha = modawformHelper::awCaptchaAjax(null,$params->get('awcaptcha'),$module->id);
 ?>
 
 <form action="" class="aw-form" method="post" id="<?= $moduleId;?>" <?= $modal == 'modal' ? 'style="display: none"': null;?> <?= $modal == 'modal' ? 'class="awModalForm"': null;?>>
 	<div class="aw-form-fields">
-		<?php awRender::getDados($params->get('awform'),$classHelper->awCaptchaAjax(null,$params->get('awcaptcha'),$module->id),$module->id,null,$params); ?>
+		<?php awRender::getDados($params->get('awform'),$module->id,null,$params); ?>
 	
 	<div class="aw-form-status"></div>
 	<input type="hidden" name="awCurrent" value="<?= $uri->toString();?>" >
+	<div class="g-recaptcha-ativar" ></div>
 </div>
 </form>
 

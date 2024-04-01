@@ -141,7 +141,7 @@ class awValid {
 
     public static function validarCampoObrigatorio($valor,$campo,$name)
     {
-        if(empty($valor)){
+        if(empty(trim($valor))){
             $dados = [];
             //$dados['erro_campo'] = true;
             //$dados[$name] = 'O campo '.$campo.' é Obrigatório';

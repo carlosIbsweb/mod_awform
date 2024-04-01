@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 ********/
 
 class awRender {
-	public static function getDados($json,$captcha,$moduleId,$dbName = null,&$params = null){
+	public static function getDados($json,$moduleId,$dbName = null,&$params = null){
 
 		if(isset($_GET['awEdit']))
 		{
@@ -248,7 +248,7 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params){
 			}
 			break;
 		case 'select':
-			$renderFields[] = '<select class="form-control" id="'.$attr['name'].'" '.$attr. $valid.'>';
+			$renderFields[] = '<select class="form-control form-select" data-uf id="'.$name.'" '.$attr. $valid.'>';
 				foreach($options as $option){
 					$selected = $option['selected'] ? 'selected' : null;
 					$renderFields[] = '<option value="'.$option['value'].'" '.$selected.'>'.$option['label'].'</option>';
@@ -291,7 +291,7 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params){
     			}
     		}
   			//$renderFields[] = '<input type="text" name="moduleId" value="'.$moduleId.'" />';
-  			$renderFields[] = !empty($captcha) ? '<div class="awCaptchaRe" '.$captchaAlign.'>'.$captcha.'</div>' : null;
+  			$renderFields[] = $params->get('awcaptcha') ? '<div class="awCaptchaRe" '.$captchaAlign.'></div>' : null;
     		$renderFields[] = '<button type="'.$buttonType.'" class="btn btn-'.$className.'" '.$attr.'>'.$options[0]['label'].'</button>';
     		break;
     	case 'h1':

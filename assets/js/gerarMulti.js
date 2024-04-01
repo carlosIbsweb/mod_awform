@@ -73,6 +73,7 @@ jQuery(function($) {
             clone.find('.uploadInput').remove()
             clone.find('.fileAnexo').css({'display':'block'}) //caso esteja invisivel
             clone.find('input').val('')
+            clone.find('.aw-required').remove()
 
 
             $(`.multi.${groupClass}`).last().after(clone.find('input:text').val('').end());

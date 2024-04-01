@@ -60,7 +60,7 @@
     /*********
      Ajax Form
     *********/
-    const awFormAjax = function(formId){
+    const awFormAjax = function(formId,el){
       var awformId = formId.replace('#','');
 
       $(document).on(awformId, function(evt,formId) {
@@ -72,6 +72,7 @@
           let botaoSubmit = form.find('[type="submit"]')
           let textoBotaoSubmit = botaoSubmit.text();
 
+          //Input Files
           $.each(form.find('input[type="file"]'), function(i, tag) {
             $.each($(tag)[0].files, function(i, file) {
               formData.append(tag.name, file);
@@ -105,7 +106,7 @@
           beforeSend: function (response) {
             $(form).find(".aw-form-status").html( `<div class="alert alert-info" style="text-align:center">Aguarde... <div class="awLoader-18"></div></div>` ).fadeIn('slow')
             //Desarmar o botão em quanto faz o processamento.
-            //botaoSubmit.attr('disabled',true)
+            botaoSubmit.attr('disabled',true)
             animeScroll($(form).find('.aw-form-status'),500,opt.offSetTop);
           },
           success: function (response) {
@@ -352,7 +353,6 @@
       });
     }
 
-
     //Exibir botão de mostrar senha
     function mostrarSenha() {
       var camposSenha = document.querySelectorAll("input[type='password']");
@@ -439,7 +439,6 @@
         let modalTitle = el.data('title') ? `<h4>${el.data('title')}</h4>` : ''
         let modalSubtitle = el.data('subtitle') ? `<p>${el.data('subtitle')}</p>` : ''
         let modalDataId = el.data('id') ? el.data('id') : false;
-
       if($('.awMform').length == 0){
         layModal.push('<div class="awMform" style="display:none">')
         var modForm = '<form action="" method="post" id="awForm-'+fid+'" novalidate="novalidate">'+sessionStorage.getItem('awMform-'+fid)+'</form>';
@@ -468,12 +467,13 @@
 
       //Mascara telefone
       maskTel();
+      awDataCep(opt.formId)
       //Validação
       //awFormValid();
       }
 
       /*
-        Modal Chebox
+        Modal Chebox - Impedindo o preenchimento do checkbox sem clicar em um termo, descição etc.
       */
       const modalCheckbox = function(el){ 
 
@@ -499,15 +499,10 @@
                   </div>
               </div>
             `)
-
             $('#awModalCheck').modal('show')
       }
 
-  
-
         $(document).on('click','[data-check-read="1"]',function(event){
-          
-
           if($(this).is(':checked') != false){
             event.preventDefault();
             modalCheckbox($(this));
@@ -515,8 +510,6 @@
           }
           
         })
-      
-
       function modalCheck(sel,selOk,selModal){
         //removendo a ação anterior
           $(document).off('click', selOk);
@@ -530,6 +523,8 @@
             }
          }) 
       }
+
+      /* #End modal check */
         
 
       $(document).on('click','.awFormModal',function(event){
@@ -637,6 +632,8 @@
 
     $(this).each(function(){
        maskTel();
+       awDataCep('#'+awformId)
+       
     })
     
   })
