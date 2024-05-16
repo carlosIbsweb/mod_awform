@@ -110,7 +110,7 @@ class ReCaptcha
         if ($response == null || strlen($response) == 0) {
             $recaptchaResponse = new ReCaptchaResponse();
             $recaptchaResponse->success = false;
-            $recaptchaResponse->errorCodes = 'missing-input';
+            $recaptchaResponse->errorCodes = 'missing-inputssssssssssss';
             return $recaptchaResponse;
         }
 

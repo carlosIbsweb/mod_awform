@@ -11,7 +11,7 @@
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>jcarloswk@gmail.com</authorEmail>
     <authorUrl>www.site7dias.com.br</authorUrl>
-    <version>1.8</version>
+    <version>2.4</version>
     <description>Construtor de Formulários</description>
     <files>
         <filename module="mod_awform">mod_awform.php</filename>
@@ -463,6 +463,7 @@
                     label="Variações permitidas"
                     default="+,-"
                     description="Variações separadas por virgula +,-,*"
+                    showon="awcaptchaType:awcaptcha"
                 />
                 <field
                     name="vAdd"
@@ -470,6 +471,7 @@
                     label="MOD_AWFORM_VADD_LABEL"
                     default="20"
                     description="MOD_WKCONTACT_SITEKEY_DESCRIPTION"
+                    showon="awcaptchaType:awcaptcha"
                 />
                 <field
                     name="vSub"
@@ -477,6 +479,7 @@
                     default="10"
                     label="MOD_AWFORM_VSUB_LABEL"
                     description="MOD_WKCONTACT_SECRETKEY_DESCRIPTION"
+                    showon="awcaptchaType:awcaptcha"
                 />
                 <field
                     name="vMul"
@@ -484,9 +487,10 @@
                     label="MOD_AWFORM_VMUL_LABEL"
                     default="10"
                     description="MOD_WKCONTACT_SITEKEY_DESCRIPTION"
+                    showon="awcaptchaType:awcaptcha"
                 />
 
-                <field name="cAlign" type="list" default="left" label="Posição">
+                <field name="cAlign" type="list" default="left" label="Posição" showon="awcaptchaType:awcaptcha">
                     <option value="left">Left</option>
                     <option value="right">Right</option>
                     <option value="center">Center</option>

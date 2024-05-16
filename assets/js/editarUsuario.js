@@ -129,7 +129,7 @@ function dadosUser() {
       formData.append('formName', form)
 
       $.ajax({
-          url: '/index.php?option=com_ajax&module=awform&method=dadosTabelaRelacaoUsuarios&format=json',
+          url:  JuriBase+'index.php?option=com_ajax&module=awform&method=dadosTabelaRelacaoUsuarios&format=json',
           type: 'POST',
           data: formData,
           contentType: false,

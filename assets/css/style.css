@@ -5,7 +5,18 @@
 .aw-form-row .aw-form-label {
   display:block;
 }
-
+.aw-form .close {
+  position:absolute;
+  top:0;
+  right:0;
+  margin-top:-10px;
+  margin-right:-10px;
+  border-radius:50%;
+  width: 25px;
+  height: 25px;
+  background: #a8c8b9;
+  border-color: #212529 !important;
+}
 .aw-confirm {
   display: flex;
   justify-content: center;

@@ -8,7 +8,7 @@
         // These are the defaults.
         formId: "",
         idForm: "",
-        offSetTop: 120,
+        offSetTop: 220,
         awEditId: false,
         awEdit: false,
         idEdit: '',
@@ -107,7 +107,7 @@
             $(form).find(".aw-form-status").html( `<div class="alert alert-info" style="text-align:center">Aguarde... <div class="awLoader-18"></div></div>` ).fadeIn('slow')
             //Desarmar o botão em quanto faz o processamento.
             botaoSubmit.attr('disabled',true)
-            animeScroll($(form).find('.aw-form-status'),500,opt.offSetTop);
+            //animeScroll($(form).find('.aw-form-status'),-50,opt.offSetTop);
           },
           success: function (response) {
             setTimeout(function(){
@@ -143,7 +143,13 @@
                       $(this).html( success ).fadeIn('slow')
                    })
                   //$(form).find(".aw-form-status").html( success ).fadeIn('slow')
-                  animeScroll($(form).find('.aw-form-status'),500,opt.offSetTop);
+                  animeScroll(form,500,opt.offSetTop);
+                  setTimeout(() => {
+                    $(form).find('.alert-success').append(`<button type="button" class="close aw-new" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>`)
+                  }, 500);
+                  
                 }
               }
               else
@@ -173,7 +179,7 @@
                   
                 })
                 if($(form).find('.aw-text-error').length){
-                  animeScroll($(form).find('.aw-text-error').eq(0),500,opt.offSetTop);
+                  animeScroll(form,500,opt.offSetTop);
                 }
                 
                 $(form).find(".aw-form-status").fadeOut('slow')
@@ -581,6 +587,7 @@
       form.prepend('<div class="aw-form-fields">'+sessionStorage.getItem(formIdNew)+'</div>');
       $( document ).awMask();
       form.find(".aw-form-status").html( '' );
+      form.find('.alert-success').remove()
       //form.find(".awValidMsg").removeClass( 'has-feedback has-error has-success' );
       //form.find(".awValidMsg").find('.glyphicon').remove();
       animeScroll(form,500,120);

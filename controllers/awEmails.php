@@ -22,7 +22,6 @@ class awEmails {
 
 	public static function setEmail($iPosts,$iFiles,&$params,$bodyText,$subject,$recipient)
 	{
-		
 		$mail = Factory::getMailer();
 		$user = Factory::getUser();
 
@@ -165,11 +164,17 @@ class awEmails {
 		
 		// Configurações do servidor SMTP
         $config = Factory::getConfig();
-        $mail = Mail::getInstance('smtp');
+		$mailer = $config->get('mailer');
 
-		//$sender = array($params->get('emailsender'), $params->get('namesender'));
-		$sender = array($config->get('mailfrom'), $config->get('fromname'));
+        
 
+		if($mailer == 'smtp'){
+			$mail = Mail::getInstance($mailer);
+			$sender = array($config->get('mailfrom'), $config->get('fromname'));
+		}else{
+			$sender = array($params->get('emailsender'), $params->get('namesender'));
+		}
+		
 		$mail->setSender($sender);
 		if($bcc)
 			$mail->AddBCC($bcc);
@@ -189,7 +194,7 @@ class awEmails {
 			
 		
 		if($mail->Send())
-		{	
+		{
 			return true;
 		}
 		else

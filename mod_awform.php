@@ -10,6 +10,9 @@
 // Acesso ao Joomla
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
+
 
 // Controller
 require_once dirname(__FILE__).'/helper.php';
@@ -21,6 +24,15 @@ $app = JFactory::getApplication();
 $item = modawformHelper::getItems($params);
 $modal = $params->get('awType');
 $user = JFactory::getUser();
+
+// Obtém as configurações do plugin reCAPTCHA
+$pluginCaptcha = PluginHelper::getPlugin('captcha', 'recaptcha');
+$paramsCaptcha = false;
+if ($pluginCaptcha) {
+    // Obtém os parâmetros do plugin reCAPTCHA
+    $paramsCaptcha = json_decode($pluginCaptcha->params);
+}
+
 
 // Load jquery.
 if ($params->get('loadjquery', '1')) {
@@ -49,7 +61,7 @@ $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/dataCep.js?V='.$
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/scripts.js?v='.$scriptVersion);
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/gerarMulti.js?v='.$scriptVersion);
 $doc->addScript(JUri::base(true).'/modules/mod_awform/assets/js/editarUsuario.js?v=9');
-
+$doc->addScript('https://www.google.com/recaptcha/api.js');
 
 
 //Meu sufixo de classe de módulo.

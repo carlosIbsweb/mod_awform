@@ -16,6 +16,7 @@ jimport('joomla.database.table');
 jimport('joomla.error.error');
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
 
 spl_autoload_register(function ($class) {
     @include dirname(__FILE__) . '/controllers/'.$class.'.php';
@@ -32,7 +33,14 @@ class modawformHelper
 
 	public static function setFormAjax()
 	{
-		
+		// Obtém as configurações do plugin reCAPTCHA
+		$pluginCaptcha = PluginHelper::getPlugin('captcha', 'recaptcha');
+		$paramsCaptcha = false;
+		if ($pluginCaptcha) {
+			// Obtém os parâmetros do plugin reCAPTCHA
+			$paramsCaptcha = json_decode($pluginCaptcha->params);
+		}
+
 		$input = Factory::getApplication()->input;
 		//inputs
 		$iFiles 	= $_FILES;
@@ -116,10 +124,22 @@ class modawformHelper
 
 		if(!$params->get('debugarEmail')){
 			//Valid Captcha
-			if(!self::awCaptchaAjax($awCaptcha,false,null,$awCaptchaRest,$params) && $params->get('awcaptcha'))
-			{
-				return false;
-				exit();
+			
+			if($params->get('awcaptchaType') == 'awcaptcha'){
+				if(!self::awCaptchaAjax($awCaptcha,false,null,$awCaptchaRest,$params) && $params->get('awcaptcha'))
+				{
+					return false;
+					exit();
+				}
+			}
+
+			
+			if($params->get('awcaptcha') && $params->get('awcaptchaType') == 'googleCaptcha'){
+
+				if(!awCaptcha::getReCaptcha($paramsCaptcha->public_key,$paramsCaptcha->private_key,$queryArray['g-recaptcha-response'])){
+					echo awUtilitario::awMessages('Solução captcha inválido','danger');
+					exit();
+				}
 			}
 		}
 		

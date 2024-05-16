@@ -17,19 +17,22 @@ $moduleId = 'awForm-'.$module->id;
 
 $classHelper = new modawformHelper;
 //$renderCaptcha = modawformHelper::awCaptchaAjax(null,$params->get('awcaptcha'),$module->id);
+
+
+
 ?>
 
 <form action="" class="aw-form" method="post" id="<?= $moduleId;?>" <?= $modal == 'modal' ? 'style="display: none"': null;?> <?= $modal == 'modal' ? 'class="awModalForm"': null;?>>
 	<div class="aw-form-fields">
-		<?php awRender::getDados($params->get('awform'),$module->id,null,$params); ?>
+		<?php awRender::getDados($params->get('awform'),$module->id,null,$params,$paramsCaptcha); ?>
 	
 	<div class="aw-form-status"></div>
 	<input type="hidden" name="awCurrent" value="<?= $uri->toString();?>" >
-	<div class="g-recaptcha-ativar" ></div>
 </div>
 </form>
 
 <script type="text/javascript">
+	let JuriBase = '<?= Juri::base();?>'
 	jQuery(function($){
 		$( document ).ready(function(){
 			$( '#<?= $moduleId;?>' ).valid({
@@ -42,11 +45,3 @@ $classHelper = new modawformHelper;
 		})
 	})
 </script>
-
-<?php /*
-<a class="awFormModal" data-title="Da Escola para a Universidade" data-subtitle="Preencha os dados abaixo e receba o e-book em seu e-mail!" data-id="25" href="136">Modal Form</a>
-
-
-<button class="btn btn-primary awCheckModal" data-title="Como é amigo">Open first modal</button>
-
-*/?>

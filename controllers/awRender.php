@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 ********/
 
 class awRender {
-	public static function getDados($json,$moduleId,$dbName = null,&$params = null){
+	public static function getDados($json,$moduleId,$dbName = null,&$params = null,&$paramsCaptcha = false){
 
 		if(isset($_GET['awEdit']))
 		{
@@ -60,7 +60,7 @@ class awRender {
 								if($cId === $c)
 								{
 									$cfColumn = get_object_vars($columns->config);
-									self::getForm($t->fields,$columns->fields,$cfColumn['width'],$captcha,$moduleId,$dbName,$params);					
+									self::getForm($t->fields,$columns->fields,$cfColumn['width'],$captcha,$moduleId,$dbName,$params,$paramsCaptcha);					
 								}
 							}
 							echo '</div>';
@@ -77,23 +77,23 @@ class awRender {
 	return $list;
 }
 
-public static function getForm($dados,$colFields = array(),$wColumn,$captcha,$moduleId,$dbName = null,$params){
+public static function getForm($dados,$colFields = array(),$wColumn,$captcha,$moduleId,$dbName = null,$params,$paramsCaptcha){
 	$render = [];
 	foreach($colFields as $colField){
 		foreach(json_decode(json_encode($dados)) as $fId => $field){
 			if($fId === $colField){
 				if(isset($_GET['awEdit']))
 				{
-					awRenderEdit::render($field,$wColumn,$captcha,$moduleId,$dbName,$params);
+					awRenderEdit::render($field,$wColumn,$captcha,$moduleId,$dbName,$params,$paramsCaptcha);
 				}else{
-				self::render($field,$wColumn,$captcha,$moduleId,$params);
+				self::render($field,$wColumn,$captcha,$moduleId,$params,$paramsCaptcha);
 				}
 			}
 		}
 	}
 }
 
-public static function render($fields,$wColumn,$captcha,$moduleId,$params){
+public static function render($fields,$wColumn,$captcha,$moduleId,$params,$paramsCaptcha){
 	
 	//Vars
 	parse_str(http_build_query(json_decode(json_encode($fields),true)),$queryArr);
@@ -291,7 +291,9 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params){
     			}
     		}
   			//$renderFields[] = '<input type="text" name="moduleId" value="'.$moduleId.'" />';
-  			$renderFields[] = $params->get('awcaptcha') ? '<div class="awCaptchaRe" '.$captchaAlign.'></div>' : null;
+  			$renderFields[] = $params->get('awcaptcha') && $params->get('awcaptchaType') == 'awcaptcha' ? '<div class="awCaptchaRe" '.$captchaAlign.'></div>' : null;
+			$renderFields[] = $params->get('awcaptcha') && $params->get('awcaptchaType') == 'googleCaptcha' && $paramsCaptcha->public_key ? 
+				'<div class="g-recaptcha" data-sitekey="'.$paramsCaptcha->public_key.'"></div>' : null;
     		$renderFields[] = '<button type="'.$buttonType.'" class="btn btn-'.$className.'" '.$attr.'>'.$options[0]['label'].'</button>';
     		break;
     	case 'h1':

@@ -222,9 +222,10 @@ class awCaptcha {
 	    {
 	        $resp = $reCaptcha->verifyResponse(
 	        $_SERVER["REMOTE_ADDR"],
-	        $response
+	        	$response
 	        );
 	    }
+
 	    if ($resp != null && $resp->success)
 	    {
 	        return true;

@@ -372,7 +372,14 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
                     user_id INT(11) NOT NULL,
                     form_id VARCHAR(255),
                     awToken VARCHAR(255),
-                    data DateTime
+                    data DateTime,
+                    created_by INT(11) NULL,
+                    modified_by INT(11) NULL,
+                    state TINYINT(1) DEFAULT 1,
+                    ordering INT(11) NULL,
+                    checked_out INT(11) NULL,
+                    checked_out_time DateTime
+                    
                 )";
 
                 $db->setQuery($query);
