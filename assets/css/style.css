@@ -121,6 +121,9 @@ span.uploadClose {}
 .aw-input-error {
   border-color:#d00 !important;
 }
+.aw-form-fields textarea {
+  height:auto !important
+}
 .aw-form-fields .form-control, .aw-form-fields .form-select {
     color: #212529;
     appearance: none;
@@ -129,12 +132,13 @@ span.uploadClose {}
     border-radius: 6px;
     background-clip: padding-box;
     width: 100%;
-    /*padding: 0.5rem 1rem;*/
+    /* padding: 0.5rem 1rem; */
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     display: block;
+    height: 45px;
 }
 .has-success .form-control-feedback:before {
     content:"\f00c";
@@ -240,6 +244,9 @@ span.uploadClose {}
   font-size: 20px !important;
   line-height: 30px;
   cursor: pointer;
+}
+.g-recaptcha,.aw-g-recaptcha {
+  margin-bottom: 20px
 }
 
 /*Edit*/

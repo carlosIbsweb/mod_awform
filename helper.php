@@ -58,7 +58,7 @@ class modawformHelper
 		$moduleId = $moduleId[1];
 		$awCaptcha = 'awCaptcha_'.$moduleId;
 		$awCaptcha = $$awCaptcha;
-
+		
 
 		/********************
 		 *GET Params
@@ -112,7 +112,6 @@ class modawformHelper
 		
 		if(!self::awValid($iPosts,$params,$iFiles))
 		{
-			
 			return false;
 		}
 
@@ -150,7 +149,7 @@ class modawformHelper
 		}
 
 		//Campos Unicos
-		if(($params->get('activDb') && $params->get('db') && !empty($params->get('validFields'))))
+		if( ( $params->get('activDb') && $params->get('db') && !empty($params->get('validFields')) && awLogin::tableExists($params->get('db')) ) )
 		{
 			if(!awLogin::validFields($params,$iPosts))
 			{
@@ -158,7 +157,7 @@ class modawformHelper
 				exit();
 			}
 		}
-
+		
 		//Set Limite.
 		if(($params->get('activDb') && $params->get('db') && $params->get('setLimit')))
 		{
@@ -206,6 +205,8 @@ class modawformHelper
 			$report['success'] = true;
 		}
 
+
+
 		//Set DB
 		if(($params->get('activDb') && $params->get('db')))
 		{	
@@ -216,8 +217,7 @@ class modawformHelper
 				exit();
 			}
 		}
-
-
+		
 		if($report['success'])
 		{	
 			if($params->get('payment')){

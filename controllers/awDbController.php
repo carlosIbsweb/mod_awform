@@ -391,19 +391,19 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
         }
 
         //Inserir campos globais que ainda não existem para o funcionamento perfeito do awform.
-        array_push($novosCampos, 
+        /*array_push($novosCampos, 
         	$db->quoteName('user_id'),
             $db->quoteName('form_id'),
             $db->quoteName('data')
-        );
+        );*/
 
         $camposDaTabela = $db->getTableColumns($tabela);
 
+        ///print_r(array_keys($camposDaTabela));
 
         // Agora, adicione os novos campos
         foreach ($novosCampos as $novoCampo) {
-            if (!array_key_exists($novoCampo, $camposDaTabela)) {
-
+            if (!in_array(str_replace('`','',$novoCampo), array_keys($camposDaTabela))) {
                 // O campo não existe, então adicione-o
                 try {
                     $query = "ALTER TABLE " . $db->quoteName($tabela) . "
@@ -411,15 +411,17 @@ public static function setTableRelated(&$params,$iPosts,$insertId)
                     
                     $db->setQuery($query);
                     $db->execute();
-
                     Factory::getApplication()->enqueueMessage('Campo ' . $novoCampo . ' adicionado com sucesso.', 'message');
                 } catch (Exception $e) {
-                     awUtilitario::awMessages($e->getMessage(),'danger');
+
+                     echo awUtilitario::awMessages($e->getMessage(),'danger');
+                        exit();
                         return false;
                 }
             }
         }
-        
+
+        return true;
     }
 
     //Atualizar dados por token

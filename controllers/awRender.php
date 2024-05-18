@@ -293,7 +293,7 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params,$param
   			//$renderFields[] = '<input type="text" name="moduleId" value="'.$moduleId.'" />';
   			$renderFields[] = $params->get('awcaptcha') && $params->get('awcaptchaType') == 'awcaptcha' ? '<div class="awCaptchaRe" '.$captchaAlign.'></div>' : null;
 			$renderFields[] = $params->get('awcaptcha') && $params->get('awcaptchaType') == 'googleCaptcha' && $paramsCaptcha->public_key ? 
-				'<div class="g-recaptcha" data-sitekey="'.$paramsCaptcha->public_key.'"></div>' : null;
+				'<div class="g-recaptcha" data-sitekey="'.$paramsCaptcha->public_key.'"></div> <div id="g-recaptcha" class="aw-g-recaptcha"></div>' : null;
     		$renderFields[] = '<button type="'.$buttonType.'" class="btn btn-'.$className.'" '.$attr.'>'.$options[0]['label'].'</button>';
     		break;
     	case 'h1':

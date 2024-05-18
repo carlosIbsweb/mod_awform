@@ -14,6 +14,7 @@ use Joomla\CMS\Uri\Uri;
 $uri = Uri::getInstance();
 
 $moduleId = 'awForm-'.$module->id;
+$jurBase = Juri::base();
 
 $classHelper = new modawformHelper;
 //$renderCaptcha = modawformHelper::awCaptchaAjax(null,$params->get('awcaptcha'),$module->id);
@@ -22,7 +23,7 @@ $classHelper = new modawformHelper;
 
 ?>
 
-<form action="" class="aw-form" method="post" id="<?= $moduleId;?>" <?= $modal == 'modal' ? 'style="display: none"': null;?> <?= $modal == 'modal' ? 'class="awModalForm"': null;?>>
+<form action="" class="aw-form" method="post" id="<?= $moduleId;?>" <?= $modal == 'modal' ? 'style="display: none"': null;?> <?= $modal == 'modal' ? 'class="awModalForm"': null;?> data-base="<?= $jurBase;?>">
 	<div class="aw-form-fields">
 		<?php awRender::getDados($params->get('awform'),$module->id,null,$params,$paramsCaptcha); ?>
 	
@@ -32,7 +33,6 @@ $classHelper = new modawformHelper;
 </form>
 
 <script type="text/javascript">
-	let JuriBase = '<?= Juri::base();?>'
 	jQuery(function($){
 		$( document ).ready(function(){
 			$( '#<?= $moduleId;?>' ).valid({
@@ -40,7 +40,8 @@ $classHelper = new modawformHelper;
 				idForm: '<?= $module->id;?>',
 				modalForm: <?= $modal == 'modal' ? 'true' : 'false';?>,
 				captAlign: '<?= $cAlign;?>',
-				divParent: '.sp-module'
+				divParent: '.sp-module',
+				JuriBase: '<?= $jurBase;?>'
 			})
 		})
 	})

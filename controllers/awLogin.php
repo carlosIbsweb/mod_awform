@@ -269,16 +269,16 @@ class awLogin {
        $query->select($db->quoteName($vFieldsNames))
            ->from($db->quoteName($params->get('db')));
            
-       // Set the query and load the result.
-       $db->setQuery($query);
-       
        try
-       {
+       { 
+            // Set the query and load the result.
+            $db->setQuery($query);
            $result = $db->loadObjectList();
        }
        catch (RuntimeException $e)
        {
-           JError::raiseWarning(500, $e->getMessage());
+           echo $e->getMessage();	
+           exit();
        }
         
         $status = true;
@@ -387,5 +387,29 @@ class awLogin {
         }
     }
 
+    public static function tableExists($tabela)
+    {
+        $db = Factory::getDbo();
+        $tableName = $tabela;
+
+       // Tente obter informações da tabela
+       try {
+           $query = $db->getQuery(true)
+               ->select('1')
+               ->from($db->quoteName($tableName))
+               ->setLimit(1);
+
+           $db->setQuery($query);
+           $db->execute();
+
+           // Se a execução ocorrer sem erro, a tabela existe
+           $tableExists = true;
+       } catch (\Exception $e) {
+           // Se ocorrer um erro, a tabela não existe
+           $tableExists = false;
+       }
+
+       return $tableExists;
+    }
 
 }

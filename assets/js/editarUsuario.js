@@ -120,6 +120,7 @@ function dadosUser() {
       // Dados que vocÃª deseja enviar para o servidor
       let formData = new FormData();
       let form = $('.aw-form').attr('id');
+      let JuriBase = $('.aw-form').data('base')
 
       if(form){
         let formDados = form.split('-')

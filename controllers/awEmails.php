@@ -166,16 +166,21 @@ class awEmails {
         $config = Factory::getConfig();
 		$mailer = $config->get('mailer');
 
-        
-
 		if($mailer == 'smtp'){
 			$mail = Mail::getInstance($mailer);
 			$sender = array($config->get('mailfrom'), $config->get('fromname'));
 		}else{
 			$sender = array($params->get('emailsender'), $params->get('namesender'));
 		}
+
 		
 		$mail->setSender($sender);
+		
+		if(empty($recipient)){
+			echo awUtilitario::awMessages('Campo recipiente não pode estar vázio','danger');
+			return false;
+		}
+		
 		if($bcc)
 			$mail->AddBCC($bcc);
 		$mail->addRecipient($recipient);
@@ -183,6 +188,8 @@ class awEmails {
 		$mail->isHTML(true);
 		$mail->Encoding = 'base64';
 		$mail->setBody($message);
+
+		
 		
 		//files
 		if($params->get('exAtta'))

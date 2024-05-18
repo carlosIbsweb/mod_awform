@@ -14,7 +14,8 @@
         idEdit: '',
         modalForm: true,
         captAlign: 'float:left',
-        divParent: ''
+        divParent: '',
+        JuriBase: ''
     }, opt );
 
     const awEl = this;
@@ -32,12 +33,15 @@
         var aHeight = (aHeight - 15) - (aLHeight);
         $(this).css({"height":aHeight+'px'})
       }); 
-
+      
       //Modal Form
       var mForm = $(opt.formId).clone();
+
+      
       sessionStorage.setItem('awMform-'+opt.idForm, mForm.clone().find('.awCaptchaRe').html('<div class="aw-form-row row" style="margin:0 !important"><div style="'+opt.captAlign+'; display:table;" class="awLoader-18"></div></div>').end().html());
 
       var formI = $(opt.formId).find('.aw-form-fields').clone().find('.awCaptchaRe').html('<div class="aw-form-row row" style="margin:0 !important"><div style="'+opt.captAlign+'; display:table;" class="awLoader-18"></div></div>').end().html();
+
       sessionStorage.setItem('awForm-'+opt.idForm, formI);
     }
 
@@ -55,6 +59,15 @@
         $(formIEdit).hide().prependTo('.aw-form-edit-content').fadeIn("slow");
         $('.aw-form-edit-content').find('.awLoading').remove();
       }, 500);
+    }
+
+    function captchaGoogleAtivo(){
+      let sitekey = $(opt.formId).find('.g-recaptcha').length;
+      if(!sitekey){
+        return false;
+      }
+
+      return true;
     }
 
     /*********
@@ -97,7 +110,7 @@
         $(form).find(".wkstatus").html('tt').fadeIn('slow');
         
         $.ajax({
-          url   : '/index.php?option=com_ajax&module=awform&method=setForm&format=json',
+          url   : opt.JuriBase+'index.php?option=com_ajax&module=awform&method=setForm&format=json',
           type   : 'POST',
           data: formData,
           contentType: false,
@@ -193,13 +206,17 @@
                 animeScroll($(form).find('.aw-form-status'),500,opt.offSetTop);
                 $( document ).trigger('awCaptcha'+formId,[formId]);
               }
-                
+
+              if(captchaGoogleAtivo()){
+                grecaptcha.reset();
+              }
+                  
               }
 
               botaoSubmit.html(textoBotaoSubmit).
               attr('disabled',false)
             },1200);
-    
+            
           }
         });
 
@@ -214,7 +231,7 @@
         formData.append('moduleId',formId);
 
         $.ajax({
-            url   : '/index.php?option=com_ajax&module=awform&method=awCaptcha&format=json',
+            url   : opt.JuriBase+'index.php?option=com_ajax&module=awform&method=awCaptcha&format=json',
             type   : 'POST',
              data: formData,
             contentType: false,
@@ -240,7 +257,7 @@
           });
 
         $.ajax({
-            url   : '/index.php?option=com_ajax&module=awform&method=awLogin&format=raw',
+            url   : opt.JuriBase+'index.php?option=com_ajax&module=awform&method=awLogin&format=raw',
             type   : 'POST',
              data: formData,
             contentType: false,
@@ -281,7 +298,7 @@
         formData.append('awUEToken',awUEToken);
 
         $.ajax({
-            url   : '/index.php?option=com_ajax&module=awform&method=awD&format=raw',
+            url   : opt.JuriBase+'index.php?option=com_ajax&module=awform&method=awD&format=raw',
             type   : 'POST',
              data: formData,
             contentType: false,
@@ -586,6 +603,15 @@
       $( document ).trigger('awCaptcha'+awformId,[awformId]);
       form.prepend('<div class="aw-form-fields">'+sessionStorage.getItem(formIdNew)+'</div>');
       $( document ).awMask();
+      awDataCep('#'+awformId)
+
+
+      if(captchaGoogleAtivo()){
+         //Renderizar o captcha do google
+        renderReCaptcha()
+      }
+     
+      
       form.find(".aw-form-status").html( '' );
       form.find('.alert-success').remove()
       //form.find(".awValidMsg").removeClass( 'has-feedback has-error has-success' );
@@ -619,7 +645,15 @@
         }
     })
 
+    // Função para renderizar o reCAPTCHA
+    function renderReCaptcha() {
+      let sitekey = $(opt.formId).find('.g-recaptcha').data('sitekey')
+      grecaptcha.render('g-recaptcha', {
+        'sitekey': sitekey
+      });
 
+      $('.g-recaptcha').remove();
+    }
    
    // awFormValid();
     awCaptcha(awformId);
@@ -640,7 +674,6 @@
     $(this).each(function(){
        maskTel();
        awDataCep('#'+awformId)
-       
     })
     
   })
