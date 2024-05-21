@@ -119,7 +119,7 @@
           beforeSend: function (response) {
             $(form).find(".aw-form-status").html( `<div class="alert alert-info" style="text-align:center">Aguarde... <div class="awLoader-18"></div></div>` ).fadeIn('slow')
             //Desarmar o botão em quanto faz o processamento.
-            botaoSubmit.attr('disabled',true)
+           // botaoSubmit.attr('disabled',true)
             //animeScroll($(form).find('.aw-form-status'),-50,opt.offSetTop);
           },
           success: function (response) {
@@ -216,6 +216,8 @@
               botaoSubmit.html(textoBotaoSubmit).
               attr('disabled',false)
             },1200);
+
+             animeScroll(form,500,opt.offSetTop);
             
           }
         });

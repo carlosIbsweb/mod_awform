@@ -11,7 +11,7 @@
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>jcarloswk@gmail.com</authorEmail>
     <authorUrl>www.site7dias.com.br</authorUrl>
-    <version>2.4</version>
+    <version>2.4.5</version>
     <description>Construtor de Formulários</description>
     <files>
         <filename module="mod_awform">mod_awform.php</filename>
@@ -490,7 +490,7 @@
                     showon="awcaptchaType:awcaptcha"
                 />
 
-                <field name="cAlign" type="list" default="left" label="Posição" showon="awcaptchaType:awcaptcha">
+                <field name="cAlign" type="list" default="left" label="Posição">
                     <option value="left">Left</option>
                     <option value="right">Right</option>
                     <option value="center">Center</option>

@@ -78,6 +78,7 @@
 }
 .aw-text-error {
   color:red;
+  display:block
 }
 .awModalCheckContent {
   position:relative;
@@ -246,7 +247,8 @@ span.uploadClose {}
   cursor: pointer;
 }
 .g-recaptcha,.aw-g-recaptcha {
-  margin-bottom: 20px
+  margin-bottom: 10px;
+  display: flex;
 }
 
 /*Edit*/

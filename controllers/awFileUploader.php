@@ -21,6 +21,16 @@ class awFileUploader {
 		    $user = jFactory::getUser();
 		    $folderUser = $user->id ? 'user-'.$user->id : '';
 
+            // Define o conteúdo do .htaccess
+            $conteudo_htaccess = <<<HTACCESS
+            # Bloquear acesso direto via navegador web
+            <FilesMatch ".*">
+                Order Deny,Allow
+                Deny from all
+                Allow from 127.0.0.1
+            </FilesMatch>
+            HTACCESS;
+
 		    foreach ($files as $k => $file) {
 		        $fieldData = array();
 
@@ -44,6 +54,9 @@ class awFileUploader {
 		                            if (!is_dir($path)) {
 		                                mkdir($path, 0777, true);
 		                                chmod($path, 0777);
+
+                                        //Criar arquivo htaccess
+                                        file_put_contents($path.'.htaccess', $conteudo_htaccess);
 		                            }
 
 		                            JFile::upload($file['tmp_name'][$subK][$subIndex], $folder . $fileName);
@@ -71,6 +84,9 @@ class awFileUploader {
 		                    if (!is_dir($path)) {
 		                        mkdir($path, 0777, true);
 		                        chmod($path, 0777);
+
+                                //Criar arquivo htaccess
+                                file_put_contents($path.'.htaccess', $conteudo_htaccess);
 		                    }
 		                    JFile::upload($file['tmp_name'][$if], $folder . $fileName);
 
@@ -158,7 +174,8 @@ return json_encode($arrayMesclado);
                 // Se for um array simples, manipule o único arquivo
                 foreach ($file['name'] as $fileIndex => $fn) {
                     if(!self::handleFile($fn, $exPer, $k, $fileIndex, null, $name)){
-                    	return false;
+                        exit();
+                        return false;
                     }
                 }
             }
@@ -167,6 +184,7 @@ return json_encode($arrayMesclado);
             if(!self::handleFile($file['name'], $exPer, $k, null, null, $name))
             {
             	return false;
+                exit();
             }
         }
     }
@@ -175,7 +193,7 @@ return json_encode($arrayMesclado);
 }
 
 // Função para lidar com um arquivo individual
-function handleFile($fn, $exPer, $k, $fk = null, $fileIndex = null, $name = '') {
+public static function handleFile($fn, $exPer, $k, $fk = null, $fileIndex = null, $name = '') {
     // Verifique se o nome do arquivo é um array
     if (is_array($fn)) {
         foreach ($fn as $fileName) {

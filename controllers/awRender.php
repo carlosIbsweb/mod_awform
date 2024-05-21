@@ -113,7 +113,7 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params,$param
 
 
 	$required 	= !empty($attrs['required']) ? 1 : null;
-	$captchaAlign = $params->get('cAlign') == 'right' ? 'style="align-items:end"' : ($params->get('cAlign') == 'center' ? 'style="align-items:center"' : 'style=""');
+	$captchaAlign = $params->get('cAlign') == 'right' ? 'style="justify-content:end"' : ($params->get('cAlign') == 'center' ? 'style="justify-content:center"' : 'style=""');
 
 	/********************************************
 	 * Validações
@@ -290,11 +290,13 @@ public static function render($fields,$wColumn,$captcha,$moduleId,$params,$param
     				$className = $option['value'];
     			}
     		}
+
+			$classDefaultButton = !awUtilitario::getAttr('class', $attr) ?  'class="btn btn-'.$className.'"' : null;
   			//$renderFields[] = '<input type="text" name="moduleId" value="'.$moduleId.'" />';
   			$renderFields[] = $params->get('awcaptcha') && $params->get('awcaptchaType') == 'awcaptcha' ? '<div class="awCaptchaRe" '.$captchaAlign.'></div>' : null;
 			$renderFields[] = $params->get('awcaptcha') && $params->get('awcaptchaType') == 'googleCaptcha' && $paramsCaptcha->public_key ? 
-				'<div class="g-recaptcha" data-sitekey="'.$paramsCaptcha->public_key.'"></div> <div id="g-recaptcha" class="aw-g-recaptcha"></div>' : null;
-    		$renderFields[] = '<button type="'.$buttonType.'" class="btn btn-'.$className.'" '.$attr.'>'.$options[0]['label'].'</button>';
+				'<div class="g-recaptcha" data-sitekey="'.$paramsCaptcha->public_key.'" '.$captchaAlign.'></div> <div id="g-recaptcha" class="aw-g-recaptcha" '.$captchaAlign.'></div>' : null;
+    		$renderFields[] = '<button type="'.$buttonType.'"  '.$classDefaultButton.' '.$attr.'>'.$options[0]['label'].'</button>';
     		break;
     	case 'h1':
     		foreach($hTag as $hR)

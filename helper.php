@@ -142,11 +142,12 @@ class modawformHelper
 			}
 		}
 		
+	
 		//Upload de arquivos
 		if(!awFileUploader::uploadFail($iFiles,$params->get('exMedia'))){
 			return false;
 			exit(); 
-		}
+		}	
 
 		//Campos Unicos
 		if( ( $params->get('activDb') && $params->get('db') && !empty($params->get('validFields')) && awLogin::tableExists($params->get('db')) ) )
