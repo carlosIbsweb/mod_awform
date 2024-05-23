@@ -20,3 +20,20 @@ Como capturar variáveis da tabela do item usado no atributo 'data-input-id'
  Tabela items: #__nomedatabela
  Campo para Condição: campo da tabela para condição ex: id
  Campo do valor: o nome do campo no formulário onde foi capturado o id do item
+
+
+<div>
+<h2>Opção de Cadastro de Newsletter (SendGrid)</h2>
+<h3>Url da API (obrigatório)</h3>
+<p>Descrição: URL da API utilizada para o envio de dados.</p>
+<h3>API Key (obrigatório)</h3>
+<p>Descrição: Chave da API necessária para autenticação.</p>
+<h3>Listas IDS (obrigatório)</h3>
+<p>Descrição: IDs das listas, separadas por vírgulas.</p>
+<h3>Campo para E-mail (obrigatório)</h3>
+<p>Descrição: Nome do campo utilizado para e-mail. Exemplo: <code>email</code></p>
+<h3>Campo para Nome (opcional)</h3>
+<p>Descrição: Nome do campo utilizado para Nome. Exemplo: <code>nome</code></p>
+<h3>Campo para Sobrenome (opcional)</h3>
+<p>Descrição: Nome do campo utilizado para Sobrenome. Exemplo: <code>sobrenome</code></p>
+</div>

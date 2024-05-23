@@ -11,7 +11,7 @@
     <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
     <authorEmail>jcarloswk@gmail.com</authorEmail>
     <authorUrl>www.site7dias.com.br</authorUrl>
-    <version>2.4.5</version>
+    <version>2.4.6</version>
     <description>Construtor de Formulários</description>
     <files>
         <filename module="mod_awform">mod_awform.php</filename>
@@ -601,6 +601,54 @@
                         filter="safehtml"
                         default=""
                      />
+    
+            </fieldset>
+
+             <fieldset name="wknewsletter" description="Cadastro de Newsletter SendGrid" label="Newsletter">
+                <field name="newsletter" type="radio" default="0" label="Ativar Lista" description="" class="btn-group btn-group-yesno radio">
+                    <option value="1">Ativar</option>
+                    <option value="0">Desativar</option>
+                </field>
+
+                <field
+                        name="newsletter_url"
+                        type="text"
+                        label="URL da API"
+                        description="Ex: https://api.sendgrid.com/v3/marketing/contacts"
+                        icon="text_signature.png" />
+
+                     <field
+                        name="newsletter_api_key"
+                        type="text"
+                        label="API Key"
+                        description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"
+                        icon="text_signature.png" />
+
+                    <field
+                        name="newsletter_list"
+                        type="text"
+                        label="Listas IDS"
+                        description="Lista de IDS separados por vírgula"
+                        icon="text_signature.png" />
+                    
+                    <field
+                        name="newsletter_email"
+                        type="text"
+                        label="Campo para E-mail"
+                        description="Colque o nome do campo usado como e-mail do seu formulário."
+                        icon="text_signature.png" />
+                    <field
+                        name="newsletter_name"
+                        type="text"
+                        label="Campo para Nome"
+                        description="Colque o nome do campo usado como primeiro nome do seu formulário."
+                        icon="text_signature.png" />
+                    <field
+                        name="newsletter_last"
+                        type="text"
+                        label="Campo para Sobrenome"
+                        description="Colque o nome do campo usado como sobrenome do seu formulário."
+                        icon="text_signature.png" />
     
             </fieldset>
 

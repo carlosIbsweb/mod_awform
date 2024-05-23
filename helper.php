@@ -206,7 +206,14 @@ class modawformHelper
 			$report['success'] = true;
 		}
 
-
+		//Set NewsLetter
+		if($params->get('newsletter')){
+			if(!awNewsletter::setNewsletter($iPosts,$params)){
+				echo 'não deu bom seu newsleteteramigokkkkk';
+				return false;
+				exit();
+			}
+		}
 
 		//Set DB
 		if(($params->get('activDb') && $params->get('db')))
