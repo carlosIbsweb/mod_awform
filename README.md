@@ -1,9 +1,9 @@
 Módulo construtor de formulários Joomla 4 +.
 PHP - 7.2,8.1+
 
-#####MODAL#########
+<h2>MODAL</h2>
 
-Como Abrir um Modal:
+<h3>Como Abrir um Modal:</h3>
 Utilzar o botão com a seguinte class 'awFormModal'
 Exemplo: <a 
 	class="btn btn-azul awFormModal" 
